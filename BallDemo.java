@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Class BallDemo - provides a demonstration of the
@@ -17,7 +18,7 @@ public class BallDemo
     private static final int WIDTH = 600;
     private static final int HEIGHT = 500;
     private ArrayList<BouncingBall> balls;
-
+    
     /**
      * Create a BallDemo object.
      * Creates a fresh canvas and makes it visible.
@@ -26,6 +27,7 @@ public class BallDemo
     {
         myCanvas = new Canvas("Ball Demo", WIDTH, HEIGHT);
         myCanvas.setVisible(true);
+	balls = new ArrayList<BouncingBall>();
     }
  
     /**
@@ -33,8 +35,19 @@ public class BallDemo
      */
     public void bounce(int n)
     {
+
+	Random rd = new Random();
 	Dimension area = myCanvas.getSize();
-		
+
+	//Definindo as possíveis cores
+	ArrayList<Color> colors = new ArrayList<Color>();
+	colors.add(Color.blue);
+	colors.add(Color.red);
+	colors.add(Color.black);
+	colors.add(Color.pink);
+	colors.add(Color.orange);
+	colors.add(Color.yellow);
+	colors.add(Color.gray);
 
 	int largura = area.width;
 	int altura = area.height;
@@ -52,25 +65,53 @@ public class BallDemo
         myCanvas.setForegroundColor(Color.blue);
         myCanvas.drawLine(xStart, ground, xLimit, ground);
 
-        // crate and show the balls
-        BouncingBall ball = new BouncingBall(xStart, 50, 16, Color.blue, ground, myCanvas);
-        ball.draw();
-        BouncingBall ball2 = new BouncingBall(xStart + 20, 80, 20, Color.red, ground, myCanvas);
-        ball2.draw();
+	for(int i = 0; i<n; i++)
+	{
+		int colorIndex = rd.nextInt(6);
+		Color ballColor = colors.get(colorIndex);
+		int ballWidth = rd.nextInt(largura);
+		int ballHeight = rd.nextInt(altura/2);
+		int ballDiameter = rd.nextInt(60);
+
+		BouncingBall newBall = new BouncingBall(ballWidth, ballHeight, ballDiameter, ballColor, ground, myCanvas);
+		
+		balls.add(newBall);
+
+		newBall.draw();
+	}
+
+	
+	for(int i = 0; i<n; i++)
+	{
+		BouncingBall b = balls.get(i);
+
+		b.draw();
+	}
+
 
         // Make them bounce until both have gone beyond the xLimit.
         boolean finished =  false;
+	int i;
         while(!finished) {
             myCanvas.wait(50);           // small delay
-            ball.move();
-            ball2.move();
+	    for(i = 0; i<n; i++)
+	    {
+		BouncingBall b = balls.get(i);
+		b.move();
+
+		if(b.getXPosition() >= xLimit)
+		{	
+			b.erase(); 
+		}
+
+		if(i == n && b.getXPosition() >= xLimit)
+           	{    
+			finished = true; 
+	    	}
+	    }
             // stop once ball has travelled a certain distance on x axis
-            if(ball.getXPosition() >= xLimit && ball2.getXPosition() >= xLimit) {
-                finished = true;
-            }
+           
         }
-        ball.erase();
-        ball2.erase();
     }
 
 	public void drawFrame()
