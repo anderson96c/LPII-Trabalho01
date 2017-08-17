@@ -48,7 +48,8 @@ public class BallDemo
 	colors.add(Color.orange);
 	colors.add(Color.yellow);
 	colors.add(Color.gray);
-
+	
+	
 	int largura = area.width;
 	int altura = area.height;
 	
@@ -67,50 +68,51 @@ public class BallDemo
 
 	for(int i = 0; i<n; i++)
 	{
+		int left = largura; //determinar a posição da bola mais à esquerda
+		//Determinando uma cor aleatória para bola
 		int colorIndex = rd.nextInt(6);
 		Color ballColor = colors.get(colorIndex);
+		//Determinando altura e largura onde ela pode aparecer
 		int ballWidth = rd.nextInt(largura);
 		int ballHeight = rd.nextInt(altura/2);
+		//Determinando o tamanho da bola
 		int ballDiameter = rd.nextInt(60);
 
+		//Instaciando a nova bola
 		BouncingBall newBall = new BouncingBall(ballWidth, ballHeight, ballDiameter, ballColor, ground, myCanvas);
 		
+		//Adicionando a bola no ArrayList
 		balls.add(newBall);
-
+		
+		//Desenhando a nova bola no canvas
 		newBall.draw();
 	}
 
 	
-	for(int i = 0; i<n; i++)
-	{
-		BouncingBall b = balls.get(i);
-
-		b.draw();
-	}
 
 
-        // Make them bounce until both have gone beyond the xLimit.
         boolean finished =  false;
 	int i;
         while(!finished) {
             myCanvas.wait(50);           // small delay
 	    for(i = 0; i<n; i++)
 	    {
+		//Fazendo cada bola se mover
 		BouncingBall b = balls.get(i);
 		b.move();
-
+		
+		//Apagar as bolas quando chegarem no final
 		if(b.getXPosition() >= xLimit)
 		{	
 			b.erase(); 
 		}
-
+		
+		//Finalizar quando a ultima bola chegar ao final
 		if(i == n && b.getXPosition() >= xLimit)
            	{    
 			finished = true; 
 	    	}
 	    }
-            // stop once ball has travelled a certain distance on x axis
-           
         }
     }
 
