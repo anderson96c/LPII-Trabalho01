@@ -16,6 +16,7 @@ public class BallDemo
     private Canvas myCanvas;
     private static final int WIDTH = 600;
     private static final int HEIGHT = 500;
+    private ArrayList<BouncingBall> balls;
 
     /**
      * Create a BallDemo object.
